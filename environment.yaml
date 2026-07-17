@@ -1,0 +1,25 @@
+name: nlp-mcqa
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - scipy
+  - joblib
+  - wordcloud
+  - pytorch
+  - faiss-cpu
+  - pip
+  - pip:
+      - datasets
+      - peft
+      - sentence-transformers
+      - transformers
+      - wandb
+      - kagglehub
