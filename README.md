@@ -66,6 +66,8 @@ pip install -r requirements.txt
 
 ## Models Implemented
 
+The trained models are deployed on Hugging Face Hub: [smart-mcq-models](https://huggingface.co/SVS8907/smart-mcq-models).
+
 1. **TF-IDF Baseline:** Uses Term Frequency-Inverse Document Frequency features with traditional classifiers to establish a performance baseline.
 2. **Bi-LSTM:** A Bidirectional Long Short-Term Memory network built in PyTorch to capture sequential context in text.
 3. **BERT + LoRA:** A pre-trained `bert-base-uncased` model fine-tuned using Low-Rank Adaptation, allowing for efficient training with high performance on the task.
