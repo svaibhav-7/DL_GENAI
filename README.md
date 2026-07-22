@@ -73,6 +73,3 @@ The trained models are deployed on Hugging Face Hub: [smart-mcq-models](https://
 3. **BERT + LoRA:** A pre-trained `bert-base-uncased` model fine-tuned using Low-Rank Adaptation, allowing for efficient training with high performance on the task.
 4. **RAG with Reranking:** A Retrieval-Augmented Generation pipeline using document retrieval and a reranking stage to select the most relevant context for question answering.
 
-## License
-
-This project is licensed under the terms of the applicable license.
