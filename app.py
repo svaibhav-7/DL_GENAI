@@ -1,13 +1,3 @@
-import streamlit as st
-import joblib
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-import torch
-import torch.nn as nn
-from transformers import AutoModelForMultipleChoice, AutoTokenizer
-from peft import PeftModel
-import os
-import sys
 
 # Import models
 sys.path.append(os.path.abspath("src"))
