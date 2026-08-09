@@ -16,3 +16,4 @@ sentence-transformers
 transformers
 wandb
 kagglehub
+streamlit

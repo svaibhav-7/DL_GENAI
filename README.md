@@ -1,3 +1,14 @@
+---
+title: Smart MCQ Models
+emoji: 🧠
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: 1.37.0
+app_file: app.py
+pinned: false
+---
+
 # Deep Learning & GenAI Project
 
 Welcome to the Deep Learning & GenAI Project repository. This project tackles natural language processing and question-answering tasks using various machine learning and deep learning approaches, progressing from simple baselines to advanced fine-tuned Large Language Models (LLMs).
