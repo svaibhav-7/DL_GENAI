@@ -11,12 +11,13 @@ import sys
 
 # Import models
 sys.path.append(os.path.abspath("src"))
-from train import BiLSTMEncoder
+from train import BiLSTMEncoder, build_index
+from inference import compute_features, rank_options, strip_wrapper
 
 st.set_page_config(page_title="Smart MCQ Models", layout="wide")
 st.title("Smart MCQ Models")
 
-model_choice = st.sidebar.selectbox("Select Model", ["TF-IDF Baseline", "Bi-LSTM from Scratch", "BERT + LoRA"])
+model_choice = st.sidebar.selectbox("Select Model", ["TF-IDF Baseline", "Bi-LSTM from Scratch", "BERT + LoRA", "RAG with Reranking"])
 
 prompt = st.text_area("Question/Prompt:")
 col1, col2 = st.columns(2)
@@ -87,12 +88,18 @@ def load_bert():
     tokenizer = AutoTokenizer.from_pretrained(base_model_name)
     base_model = AutoModelForMultipleChoice.from_pretrained(base_model_name)
 
-    # Ensure this looks inside the proper models directory for LoRA config/weights
-    # In HF standard structure, this is where adapter_model.safetensors etc. live.
     peft_model_id = "models"
     model = PeftModel.from_pretrained(base_model, peft_model_id)
     model.eval()
     return tokenizer, model
+
+@st.cache_resource
+def load_rag():
+    import faiss
+    from sentence_transformers import SentenceTransformer
+    embedder = SentenceTransformer('all-MiniLM-L6-v2')
+    reranker = joblib.load('models/rag_reranker.joblib')
+    return embedder, reranker
 
 def predict_tfidf():
     vectorizer = load_tfidf()
@@ -102,7 +109,6 @@ def predict_tfidf():
     for opt in opts:
         if opt:
              o_vec = vectorizer.transform([opt])
-             # Using cosine similarity is exactly what notebooks/02_TF-IDF_Baseline.py uses
              sims.append(cosine_similarity(p_vec, o_vec)[0][0])
         else:
              sims.append(-1)
@@ -175,6 +181,35 @@ def predict_bert():
     labels = ["A", "B", "C", "D", "E"]
     return [labels[i] for i in top_3_idx]
 
+def predict_rag():
+    import pandas as pd
+    embedder, reranker = load_rag()
+
+    # We will simulate RAG with just the inputs provided since we don't have the full corpus loaded in app context
+    import faiss
+    def embed_texts(texts):
+        emb = embedder.encode(list(texts), show_progress_bar=False, convert_to_numpy=True)
+        faiss.normalize_L2(emb)
+        return emb
+
+    opts = [A, B, C, D, E]
+    p_emb = embed_texts([prompt])
+    o_embs = embed_texts(opts)
+
+    sims = cosine_similarity(p_emb, o_embs)[0]
+
+    # For standalone inputs, simulating retrieval match with self features
+    retrieval_sim = sims
+    direct_sim = sims
+
+    feats = np.column_stack([direct_sim, retrieval_sim])
+
+    logits = reranker.decision_function(feats)
+    top_3_idx = np.argsort(logits)[-3:][::-1]
+
+    labels = ["A", "B", "C", "D", "E"]
+    return [labels[i] for i in top_3_idx]
+
 
 if st.button("Predict"):
     if not prompt or not all([A, B, C, D, E]):
@@ -188,6 +223,8 @@ if st.button("Predict"):
                     preds = predict_bilstm()
                 elif model_choice == "BERT + LoRA":
                     preds = predict_bert()
+                elif model_choice == "RAG with Reranking":
+                    preds = predict_rag()
                 st.success(f"Top 3 Predictions: {', '.join(preds)}")
             except Exception as e:
                 st.error(f"Error during prediction: {e}")

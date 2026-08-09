@@ -17,3 +17,5 @@ transformers
 wandb
 kagglehub
 streamlit
+sentence-transformers
+faiss-cpu

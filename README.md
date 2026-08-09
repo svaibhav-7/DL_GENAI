@@ -3,9 +3,8 @@ title: Smart MCQ Models
 emoji: 🧠
 colorFrom: blue
 colorTo: indigo
-sdk: streamlit
-sdk_version: 1.37.0
-app_file: app.py
+sdk: docker
+app_port: 8501
 pinned: false
 ---
 
@@ -83,4 +82,3 @@ The trained models are deployed on Hugging Face Hub: [smart-mcq-models](https://
 2. **Bi-LSTM:** A Bidirectional Long Short-Term Memory network built in PyTorch to capture sequential context in text.
 3. **BERT + LoRA:** A pre-trained `bert-base-uncased` model fine-tuned using Low-Rank Adaptation, allowing for efficient training with high performance on the task.
 4. **RAG with Reranking:** A Retrieval-Augmented Generation pipeline using document retrieval and a reranking stage to select the most relevant context for question answering.
-
