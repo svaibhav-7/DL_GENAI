@@ -1,8 +1,17 @@
+import streamlit as st
+import joblib
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+import torch
+import torch.nn as nn
+from transformers import AutoModelForMultipleChoice, AutoTokenizer
+from peft import PeftModel
+import os
+import sys
 
 # Import models
 sys.path.append(os.path.abspath("src"))
 from train import BiLSTMEncoder, build_index
-from inference import compute_features, rank_options, strip_wrapper
 
 st.set_page_config(page_title="Smart MCQ Models", layout="wide")
 st.title("Smart MCQ Models")
