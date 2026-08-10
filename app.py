@@ -12,7 +12,7 @@ import sys
 # Import models
 sys.path.append(os.path.abspath("src"))
 from train import BiLSTMEncoder, build_index
-from inference import compute_features, rank_options, strip_wrapper
+from inference import embed_texts, retrieve
 
 st.set_page_config(page_title="Smart MCQ Models", layout="wide")
 st.title("Smart MCQ Models")
@@ -204,7 +204,7 @@ def predict_rag():
     
     feats = np.column_stack([direct_sim, retrieval_sim])
     
-    logits = reranker.decision_function(feats)
+    logits = reranker['reranker'].decision_function(feats)
     top_3_idx = np.argsort(logits)[-3:][::-1]
     
     labels = ["A", "B", "C", "D", "E"]
