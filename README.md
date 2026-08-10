@@ -8,6 +8,9 @@ app_port: 8501
 pinned: false
 ---
 
+# Check out the live deployed application [Smart-MCQ-Solver-Models] that uses the trained models to answer a Question/Prompt over given choice of options:
+https://dlgenai-2upn9rjd5gpm2azoh2namr.streamlit.app/
+
 # Deep Learning & GenAI Project
 
 Welcome to the Deep Learning & GenAI Project repository. This project tackles natural language processing and question-answering tasks using various machine learning and deep learning approaches, progressing from simple baselines to advanced fine-tuned Large Language Models (LLMs).
